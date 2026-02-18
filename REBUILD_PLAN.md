@@ -242,20 +242,23 @@ System:
 
 ### Latest Changes (Overnight Grind 00:38 - 00:53)
 
-**17 commits made tonight (and counting):**
+**19 commits made tonight (and counting):**
 
 1. `d5b06ec` - Gemini chat integration + API key settings
 2. `c2d60e0` - Rapid OCR capture (1 sec interval, tesseract OCR)
 3. `59f2900` - Simplify Dashboard + Memory Browser page
-4. `cfe6a99` - Update REBUILD_PLAN with progress
-5. `d462cbf` - Last capture preview on Dashboard
-6. `990f6ac` - Improve Chat page with context count
-7. `762258a` - Configurable capture interval in Settings
-8. `54177d5` - Capture timing logs for debugging
-9. `c0b3a2c` - Screen recording permission check with warning
-10. `61a76ec` - Detailed testing guide
-11. `a1df8cd` - Memory Browser with char count + OCR badge
-12. `b362ab4` - Keyboard shortcut (⌘⇧C) to toggle capture
+4. `d462cbf` - Last capture preview on Dashboard
+5. `990f6ac` - Improve Chat page with context count
+6. `762258a` - Configurable capture interval in Settings
+7. `54177d5` - Capture timing logs for debugging
+8. `c0b3a2c` - Screen recording permission check with warning
+9. `a1df8cd` - Memory Browser with char count + OCR badge
+10. `b362ab4` - Keyboard shortcut (⌘⇧C) to toggle capture
+11. `7dff7f7` - Auto-start capture option in Settings
+12. `b40d818` - Export to Markdown in Memory Browser
+13. `dfa4fd9` - Save toast notification
+14. `cd24a89` - Improved activity feed visuals
+15. `9dae622` - Test OCR button to verify capture
 
 **Key Additions:**
 - Rapid OCR capture pipeline (screenshot → tesseract → SQLite)
