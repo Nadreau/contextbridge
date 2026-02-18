@@ -4,7 +4,7 @@
  */
 import { Shield, Info, AlertTriangle, Trash2, Database, HardDrive, Video, Square, Circle, FolderOpen } from 'lucide-react';
 import { useCaptureContext } from '../lib/captureContext';
-import { deleteAllMemories, getMemoryStats, formatBytes, startRecording, stopRecording, getRecordingStatus, listRecordings, formatDuration, RecordingStatus } from '../lib/api';
+import { deleteAllMemories, getMemoryStats, formatBytes, startRecording, stopRecording, getRecordingStatus, listRecordings, formatDuration, type RecordingStatus } from '../lib/api';
 import { useState, useEffect, useCallback } from 'react';
 import { open } from '@tauri-apps/plugin-shell';
 

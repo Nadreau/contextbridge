@@ -1,0 +1,158 @@
+/**
+ * Dashboard — Clean, Simple, One Toggle
+ */
+import { useState, useEffect } from 'react';
+import { Power, Brain, Zap, Clock, Eye } from 'lucide-react';
+import { useCaptureContext, type ActivityEvent } from '../lib/captureContext';
+import { getMemoryStats, type MemoryStats } from '../lib/api';
+
+export default function Dashboard() {
+  const { isActive, captureCount, events, isCapturing, toggleCapture } = useCaptureContext();
+  const [stats, setStats] = useState<MemoryStats | null>(null);
+
+  // Fetch stats
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        setStats(await getMemoryStats());
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetch();
+    const interval = setInterval(fetch, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Refresh stats when events change
+  useEffect(() => {
+    if (events.length > 0) {
+      getMemoryStats().then(setStats).catch(console.error);
+    }
+  }, [events.length]);
+
+  return (
+    <div className="h-full flex flex-col bg-[#09090b] p-6 overflow-hidden">
+      {/* ═══════════════════════════════════════════════════════════════════
+          THE BIG TOGGLE
+          ═══════════════════════════════════════════════════════════════════ */}
+      <button
+        onClick={toggleCapture}
+        className={`w-full flex items-center justify-between p-6 rounded-2xl transition-all duration-300 mb-6 ${
+          isActive
+            ? 'bg-emerald-500/10 border-2 border-emerald-500/50'
+            : 'bg-zinc-900 border-2 border-zinc-800 hover:border-zinc-700'
+        }`}
+      >
+        <div className="flex items-center gap-4">
+          {/* Pulsing indicator */}
+          <div className="relative">
+            <div className={`w-5 h-5 rounded-full ${isActive ? 'bg-emerald-400' : 'bg-zinc-600'}`} />
+            {isActive && (
+              <div className="absolute inset-0 w-5 h-5 rounded-full bg-emerald-400 animate-ping opacity-50" />
+            )}
+          </div>
+          
+          <div className="text-left">
+            <h1 className={`text-2xl font-bold ${isActive ? 'text-emerald-400' : 'text-zinc-500'}`}>
+              {isActive ? 'CAPTURING' : 'PAUSED'}
+            </h1>
+            <p className="text-sm text-zinc-500 mt-1">
+              {isActive 
+                ? `${captureCount} captures · OCR every 1s`
+                : 'Click to start screen capture + OCR'}
+            </p>
+          </div>
+        </div>
+
+        <div className={`w-16 h-16 rounded-xl flex items-center justify-center ${
+          isActive ? 'bg-emerald-500/20' : 'bg-zinc-800'
+        }`}>
+          {isCapturing ? (
+            <div className="w-8 h-8 border-3 border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin" />
+          ) : (
+            <Power size={32} className={isActive ? 'text-emerald-400' : 'text-zinc-500'} />
+          )}
+        </div>
+      </button>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          QUICK STATS
+          ═══════════════════════════════════════════════════════════════════ */}
+      <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
+          <div className="flex items-center gap-2 text-zinc-500 mb-2">
+            <Brain size={16} />
+            <span className="text-xs uppercase">Total Memories</span>
+          </div>
+          <p className="text-3xl font-bold text-white">{stats?.total_memories ?? 0}</p>
+        </div>
+        
+        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
+          <div className="flex items-center gap-2 text-zinc-500 mb-2">
+            <Zap size={16} />
+            <span className="text-xs uppercase">Today</span>
+          </div>
+          <p className="text-3xl font-bold text-amber-400">{stats?.memories_today ?? 0}</p>
+        </div>
+        
+        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
+          <div className="flex items-center gap-2 text-zinc-500 mb-2">
+            <Eye size={16} />
+            <span className="text-xs uppercase">This Session</span>
+          </div>
+          <p className="text-3xl font-bold text-violet-400">{captureCount}</p>
+        </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          LIVE ACTIVITY FEED
+          ═══════════════════════════════════════════════════════════════════ */}
+      <div className="flex-1 overflow-hidden flex flex-col">
+        <div className="flex items-center gap-2 mb-3">
+          <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-emerald-400 animate-pulse' : 'bg-zinc-600'}`} />
+          <h2 className="text-sm font-medium text-zinc-400 uppercase">Live Activity</h2>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto space-y-2 pr-2">
+          {events.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <Brain size={48} className="text-zinc-700 mb-4" />
+              <p className="text-zinc-500">
+                {isActive ? 'Capturing screen content...' : 'Turn on capture to start'}
+              </p>
+            </div>
+          ) : (
+            events.slice(0, 30).map((event) => (
+              <ActivityItem key={event.id} event={event} />
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ActivityItem({ event }: { event: ActivityEvent }) {
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  };
+
+  return (
+    <div className="flex items-start gap-3 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800/50 hover:bg-zinc-900 transition-colors">
+      <div className="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center flex-shrink-0">
+        <Brain size={14} className="text-violet-400" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm text-zinc-300 truncate">{event.summary}</p>
+        <div className="flex items-center gap-2 mt-1">
+          <Clock size={10} className="text-zinc-600" />
+          <span className="text-xs text-zinc-600">{formatTime(event.timestamp)}</span>
+          {event.saved && (
+            <span className="text-xs text-emerald-500">● saved</span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

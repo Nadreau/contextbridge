@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/DashboardSimple';
 import Chat from './pages/Chat';
-import PrivacyControls from './pages/PrivacyControls';
+import MemoryBrowser from './pages/MemoryBrowser';
 import Settings from './pages/Settings';
 import { CaptureProvider } from './lib/captureContext';
 
@@ -53,7 +53,7 @@ function App() {
           <div key={page} className="h-full animate-fade-in">
             {page === 'dashboard' && <Dashboard />}
             {page === 'chat' && <Chat />}
-            {page === 'privacy' && <PrivacyControls />}
+            {page === 'privacy' && <MemoryBrowser />}
             {page === 'settings' && <Settings />}
           </div>
         </main>
