@@ -2,32 +2,40 @@
  * Dashboard — Clean, Simple, One Toggle
  */
 import { useState, useEffect } from 'react';
-import { Power, Brain, Zap, Clock, Eye } from 'lucide-react';
+import { Power, Brain, Zap, Clock, Eye, FileText } from 'lucide-react';
 import { useCaptureContext, type ActivityEvent } from '../lib/captureContext';
-import { getMemoryStats, type MemoryStats } from '../lib/api';
+import { getMemoryStats, getAllMemories, type MemoryStats, type Memory } from '../lib/api';
 
 export default function Dashboard() {
   const { isActive, captureCount, events, isCapturing, toggleCapture } = useCaptureContext();
   const [stats, setStats] = useState<MemoryStats | null>(null);
+  const [lastCapture, setLastCapture] = useState<Memory | null>(null);
 
-  // Fetch stats
+  // Fetch stats and last capture
   useEffect(() => {
     const fetch = async () => {
       try {
         setStats(await getMemoryStats());
+        const memories = await getAllMemories(1);
+        if (memories.length > 0) {
+          setLastCapture(memories[0]);
+        }
       } catch (e) {
         console.error(e);
       }
     };
     fetch();
-    const interval = setInterval(fetch, 5000);
+    const interval = setInterval(fetch, 3000);
     return () => clearInterval(interval);
   }, []);
 
-  // Refresh stats when events change
+  // Refresh when events change
   useEffect(() => {
     if (events.length > 0) {
       getMemoryStats().then(setStats).catch(console.error);
+      getAllMemories(1).then(m => {
+        if (m.length > 0) setLastCapture(m[0]);
+      }).catch(console.error);
     }
   }, [events.length]);
 
@@ -104,6 +112,22 @@ export default function Dashboard() {
           <p className="text-3xl font-bold text-violet-400">{captureCount}</p>
         </div>
       </div>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          LAST CAPTURE PREVIEW
+          ═══════════════════════════════════════════════════════════════════ */}
+      {lastCapture && (
+        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800 mb-6">
+          <div className="flex items-center gap-2 text-zinc-500 mb-3">
+            <FileText size={16} />
+            <span className="text-xs uppercase">Last Capture</span>
+            <span className="text-xs text-zinc-600 ml-auto">{lastCapture.source_app || 'Unknown'}</span>
+          </div>
+          <pre className="text-xs text-zinc-400 font-mono whitespace-pre-wrap line-clamp-4 overflow-hidden">
+            {lastCapture.content}
+          </pre>
+        </div>
+      )}
 
       {/* ═══════════════════════════════════════════════════════════════════
           LIVE ACTIVITY FEED
