@@ -29,6 +29,7 @@ export default function Dashboard() {
   const [testResult, setTestResult] = useState<string | null>(null);
   const [topApps, setTopApps] = useState<{ app: string; count: number }[]>([]);
   const [sessionStart] = useState(() => Date.now());
+  const captureInterval = parseInt(localStorage.getItem('capture_interval') || '1000');
 
   // Check permission on mount
   useEffect(() => {
@@ -159,7 +160,7 @@ export default function Dashboard() {
             </h1>
             <p className="text-sm text-zinc-500 mt-1 flex items-center gap-3">
               {isActive 
-                ? `${captureCount} captures · OCR every 1s`
+                ? `${captureCount} captures · OCR every ${captureInterval < 1000 ? captureInterval + 'ms' : (captureInterval/1000) + 's'}`
                 : 'Click to start · ⌘⇧C'}
               {!isActive && (
                 <button
