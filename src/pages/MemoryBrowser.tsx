@@ -89,11 +89,17 @@ export default function MemoryBrowser() {
   const formatTime = (ts: string) => {
     const d = new Date(ts);
     const now = new Date();
-    const isToday = d.toDateString() === now.toDateString();
+    const diffMs = now.getTime() - d.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    const diffHr = Math.floor(diffMin / 60);
     
-    if (isToday) {
-      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
+    // Less than 1 minute
+    if (diffMin < 1) return 'Just now';
+    // Less than 1 hour
+    if (diffMin < 60) return `${diffMin}m ago`;
+    // Less than 24 hours
+    if (diffHr < 24) return `${diffHr}h ago`;
+    // Otherwise show date
     return d.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   };
 
