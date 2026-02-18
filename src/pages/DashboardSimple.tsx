@@ -233,7 +233,7 @@ export default function Dashboard() {
           QUICK STATS
           ═══════════════════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-4 gap-4 mb-6">
-        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
+        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800 hover:border-zinc-700 transition-colors">
           <div className="flex items-center gap-2 text-zinc-500 mb-2">
             <Brain size={16} />
             <span className="text-xs uppercase">Total</span>
@@ -241,7 +241,7 @@ export default function Dashboard() {
           <p className="text-2xl font-bold text-white">{stats?.total_memories ?? 0}</p>
         </div>
         
-        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
+        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800 hover:border-zinc-700 transition-colors">
           <div className="flex items-center gap-2 text-zinc-500 mb-2">
             <Zap size={16} />
             <span className="text-xs uppercase">Today</span>
@@ -249,7 +249,7 @@ export default function Dashboard() {
           <p className="text-2xl font-bold text-amber-400">{stats?.memories_today ?? 0}</p>
         </div>
         
-        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
+        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800 hover:border-zinc-700 transition-colors">
           <div className="flex items-center gap-2 text-zinc-500 mb-2">
             <Eye size={16} />
             <span className="text-xs uppercase">Session</span>
@@ -262,7 +262,7 @@ export default function Dashboard() {
           )}
         </div>
 
-        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
+        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800 hover:border-zinc-700 transition-colors">
           <div className="flex items-center gap-2 text-zinc-500 mb-2">
             <HardDrive size={16} />
             <span className="text-xs uppercase">Storage</span>
