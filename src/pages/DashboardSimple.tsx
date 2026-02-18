@@ -31,6 +31,7 @@ export default function Dashboard() {
   const [topApps, setTopApps] = useState<{ app: string; count: number }[]>([]);
   const [sessionStart] = useState(() => Date.now());
   const [toggling, setToggling] = useState(false);
+  const [expandedCapture, setExpandedCapture] = useState(false);
   const captureInterval = parseInt(localStorage.getItem('capture_interval') || '1000');
 
   const handleToggle = async () => {
@@ -282,7 +283,10 @@ export default function Dashboard() {
           LAST CAPTURE PREVIEW
           ═══════════════════════════════════════════════════════════════════ */}
       {lastCapture && (
-        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800 mb-6">
+        <div 
+          className="bg-zinc-900 rounded-xl p-4 border border-zinc-800 mb-6 cursor-pointer hover:border-zinc-700 transition-colors"
+          onClick={() => setExpandedCapture(!expandedCapture)}
+        >
           <div className="flex items-center gap-2 text-zinc-500 mb-3">
             <FileText size={16} />
             <span className="text-xs uppercase">Last Capture</span>
@@ -291,9 +295,12 @@ export default function Dashboard() {
             </span>
             <span className="text-xs text-zinc-600 ml-auto">
               {lastCapture.source_app || 'Unknown'} · {lastCapture.content.length.toLocaleString()} chars
+              <span className="text-violet-400 ml-2">{expandedCapture ? '▼' : '▶'}</span>
             </span>
           </div>
-          <pre className="text-xs text-zinc-400 font-mono whitespace-pre-wrap line-clamp-4 overflow-hidden">
+          <pre className={`text-xs text-zinc-400 font-mono whitespace-pre-wrap overflow-hidden transition-all ${
+            expandedCapture ? 'max-h-96' : 'line-clamp-4'
+          }`}>
             {lastCapture.content}
           </pre>
         </div>
