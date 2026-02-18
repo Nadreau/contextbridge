@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { Power, Brain, Zap, Clock, Eye, FileText, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useCaptureContext, type ActivityEvent } from '../lib/captureContext';
-import { getMemoryStats, getAllMemories, checkCapturePermission, type MemoryStats, type Memory } from '../lib/api';
+import { getMemoryStats, getAllMemories, checkCapturePermission, rapidCaptureWithOcr, type MemoryStats, type Memory } from '../lib/api';
 
 export default function Dashboard() {
   const { isActive, captureCount, events, isCapturing, toggleCapture } = useCaptureContext();
@@ -12,6 +12,8 @@ export default function Dashboard() {
   const [lastCapture, setLastCapture] = useState<Memory | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [showSaveToast, setShowSaveToast] = useState(false);
+  const [testingCapture, setTestingCapture] = useState(false);
+  const [testResult, setTestResult] = useState<string | null>(null);
 
   // Check permission on mount
   useEffect(() => {
@@ -29,6 +31,27 @@ export default function Dashboard() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [toggleCapture]);
+
+  // Test capture function
+  const handleTestCapture = async () => {
+    setTestingCapture(true);
+    setTestResult(null);
+    try {
+      const result = await rapidCaptureWithOcr();
+      if (result.success && result.changed) {
+        setTestResult(`✅ OCR captured ${result.summary.length > 50 ? result.summary.slice(0, 50) + '...' : result.summary}`);
+      } else if (result.success) {
+        setTestResult('⚡ No change detected (same as last capture)');
+      } else {
+        setTestResult(`❌ ${result.error || 'Unknown error'}`);
+      }
+    } catch (e) {
+      setTestResult(`❌ Error: ${e}`);
+    } finally {
+      setTestingCapture(false);
+      setTimeout(() => setTestResult(null), 5000);
+    }
+  };
 
   // Fetch stats and last capture
   useEffect(() => {
@@ -87,6 +110,13 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Test Result */}
+      {testResult && (
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-3 mb-4 text-sm text-zinc-300">
+          {testResult}
+        </div>
+      )}
+
       {/* ═══════════════════════════════════════════════════════════════════
           THE BIG TOGGLE
           ═══════════════════════════════════════════════════════════════════ */}
@@ -111,10 +141,19 @@ export default function Dashboard() {
             <h1 className={`text-2xl font-bold ${isActive ? 'text-emerald-400' : 'text-zinc-500'}`}>
               {isActive ? 'CAPTURING' : 'PAUSED'}
             </h1>
-            <p className="text-sm text-zinc-500 mt-1">
+            <p className="text-sm text-zinc-500 mt-1 flex items-center gap-3">
               {isActive 
                 ? `${captureCount} captures · OCR every 1s`
                 : 'Click to start · ⌘⇧C'}
+              {!isActive && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleTestCapture(); }}
+                  disabled={testingCapture}
+                  className="text-xs text-violet-400 hover:text-violet-300 underline"
+                >
+                  {testingCapture ? 'Testing...' : 'Test OCR'}
+                </button>
+              )}
             </p>
           </div>
         </div>
