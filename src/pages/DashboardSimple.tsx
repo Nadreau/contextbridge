@@ -274,8 +274,8 @@ export default function Dashboard() {
 
       {/* Top Apps */}
       {topApps.length > 0 && (
-        <div className="flex items-center gap-2 mb-4 flex-wrap">
-          <span className="text-xs text-zinc-500">Top apps:</span>
+        <div className="flex items-center gap-2 mb-4 flex-wrap pb-4 border-b border-zinc-800/50">
+          <span className="text-xs text-zinc-500">Recent apps:</span>
           {topApps.map((item, i) => (
             <span key={i} className="px-2 py-1 rounded-full bg-zinc-800 text-xs text-zinc-300">
               {item.app} ({item.count})
