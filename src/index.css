@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+* {
+  scroll-behavior: smooth;
+}
+
 :root {
   /* Core palette - premium dark theme */
   --cb-bg: #09090b;
