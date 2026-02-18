@@ -251,7 +251,7 @@ export default function Chat() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-            placeholder="Ask about your day..."
+            placeholder="Ask about your day... (Enter to send)"
             className="flex-1 px-4 py-3 rounded-xl bg-zinc-800 border border-white/[0.04] text-white text-sm placeholder:text-zinc-500 focus:outline-none focus:border-violet-500/50"
             disabled={isLoading}
           />
