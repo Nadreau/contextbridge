@@ -17,6 +17,7 @@ export default function MemoryBrowser() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'ocr' | 'manual'>('all');
   const [copied, setCopied] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   // Fetch memories
   const fetchMemories = useCallback(async () => {
@@ -54,12 +55,15 @@ export default function MemoryBrowser() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this memory?')) return;
+    setDeleting(id);
     try {
       await deleteMemory(id);
       setMemories(prev => prev.filter(m => m.id !== id));
       if (selected?.id === id) setSelected(null);
     } catch (err) {
       console.error('Delete failed:', err);
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -243,9 +247,14 @@ export default function MemoryBrowser() {
                 </button>
                 <button
                   onClick={() => handleDelete(selected.id)}
-                  className="p-2 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                  disabled={deleting === selected.id}
+                  className="p-2 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors disabled:opacity-50"
                 >
-                  <Trash2 size={18} />
+                  {deleting === selected.id ? (
+                    <div className="w-4 h-4 border-2 border-rose-400/30 border-t-rose-400 rounded-full animate-spin" />
+                  ) : (
+                    <Trash2 size={18} />
+                  )}
                 </button>
                 <button
                   onClick={() => setSelected(null)}
