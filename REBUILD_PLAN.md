@@ -231,6 +231,21 @@ System:
      `[ContextBridge] Capture: screenshot=XXms, ocr=XXms, app=Chrome, chars=1234`
    - This shows OCR is working
 
+8. **Quick Verification:**
+   - Click "Test OCR" button on Dashboard (when not capturing)
+   - Should show success message with captured text preview
+   - If it fails, check tesseract installation and screen recording permissions
+
+---
+
+## 🎉 What's Impressive
+
+- **33+ commits overnight** - major rebuild
+- **Real OCR** - tesseract extracts actual screen text
+- **1-second capture interval** - rapid context building
+- **Gemini Chat** - ask questions about your day
+- **Full Polish** - health checks, loading states, animations, keyboard shortcuts
+
 **What's Working:**
 - ✅ Configurable capture interval (500ms - 5s, default 1s)
 - ✅ Tesseract OCR (brew installed)
