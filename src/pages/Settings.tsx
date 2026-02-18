@@ -472,7 +472,39 @@ export default function Settings() {
           </section>
 
           {/* About */}
+          {/* Keyboard Shortcuts */}
           <section className="animate-fade-in-up stagger-4">
+            <h2 className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider mb-3 px-1">
+              Keyboard Shortcuts
+            </h2>
+            <div className="p-4 rounded-2xl bg-[#111113] border border-white/[0.04]">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-zinc-400">Toggle Capture</span>
+                  <kbd className="px-2 py-1 rounded bg-zinc-800 text-xs font-mono text-zinc-300">⌘⇧C</kbd>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-zinc-400">Dashboard</span>
+                  <kbd className="px-2 py-1 rounded bg-zinc-800 text-xs font-mono text-zinc-300">⌘1</kbd>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-zinc-400">Chat</span>
+                  <kbd className="px-2 py-1 rounded bg-zinc-800 text-xs font-mono text-zinc-300">⌘2</kbd>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-zinc-400">Memory</span>
+                  <kbd className="px-2 py-1 rounded bg-zinc-800 text-xs font-mono text-zinc-300">⌘3</kbd>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-zinc-400">Settings</span>
+                  <kbd className="px-2 py-1 rounded bg-zinc-800 text-xs font-mono text-zinc-300">⌘4</kbd>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* About */}
+          <section className="animate-fade-in-up stagger-5">
             <div className="p-5 rounded-2xl bg-gradient-to-br from-violet-500/[0.05] via-purple-500/[0.03] to-transparent border border-violet-500/10 relative overflow-hidden">
               {/* Subtle glow */}
               <div className="absolute top-0 left-0 w-32 h-32 bg-violet-500/10 blur-3xl pointer-events-none" />
