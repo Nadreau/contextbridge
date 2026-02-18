@@ -40,7 +40,15 @@ interface CaptureContextValue {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 const MAX_EVENTS = 100;
-const CAPTURE_INTERVAL_MS = 1000; // Every 1 second - RAPID!
+// Read capture interval from localStorage, default to 1 second
+const getStoredInterval = () => {
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('capture_interval');
+    return stored ? parseInt(stored) : 1000;
+  }
+  return 1000;
+};
+const CAPTURE_INTERVAL_MS = getStoredInterval();
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // Context

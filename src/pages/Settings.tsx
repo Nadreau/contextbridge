@@ -2,7 +2,7 @@
  * Settings - Premium design with glass morphism
  */
 import { useState } from 'react';
-import { Server, Download, Upload, Trash2, ExternalLink, AlertTriangle, CheckCircle, Settings as SettingsIcon, Copy, Check, Database, Sparkles, Key, Eye, EyeOff } from 'lucide-react';
+import { Server, Download, Upload, Trash2, ExternalLink, AlertTriangle, CheckCircle, Settings as SettingsIcon, Copy, Check, Database, Sparkles, Key, Eye, EyeOff, Timer } from 'lucide-react';
 import { deleteAllMemories, getAllMemories, saveMemory } from '../lib/api';
 
 export default function Settings() {
@@ -12,6 +12,10 @@ export default function Settings() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [geminiKey, setGeminiKey] = useState(() => localStorage.getItem('gemini_api_key') || '');
   const [keyVisible, setKeyVisible] = useState(false);
+  const [captureInterval, setCaptureInterval] = useState(() => {
+    const saved = localStorage.getItem('capture_interval');
+    return saved ? parseInt(saved) : 1000;
+  });
 
   const handleSaveGeminiKey = () => {
     if (geminiKey.trim()) {
@@ -21,6 +25,12 @@ export default function Settings() {
       localStorage.removeItem('gemini_api_key');
       setMessage({ type: 'success', text: 'Gemini API key removed' });
     }
+    setTimeout(() => setMessage(null), 3000);
+  };
+
+  const handleSaveCaptureInterval = () => {
+    localStorage.setItem('capture_interval', captureInterval.toString());
+    setMessage({ type: 'success', text: `Capture interval set to ${captureInterval}ms. Restart app to apply.` });
     setTimeout(() => setMessage(null), 3000);
   };
 
@@ -224,6 +234,53 @@ export default function Settings() {
                     Save Key
                   </button>
                 </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Capture Settings */}
+          <section className="animate-fade-in-up stagger-1">
+            <h2 className="text-[11px] font-medium text-zinc-500 uppercase tracking-wider mb-3 px-1">
+              Capture
+            </h2>
+            <div className="p-5 rounded-2xl bg-[#111113] border border-white/[0.04] relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl pointer-events-none" />
+              
+              <div className="flex items-center gap-3 mb-4 relative">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center ring-1 ring-emerald-500/20">
+                  <Timer size={18} className="text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-[14px] font-medium text-white">Capture Interval</p>
+                  <p className="text-[11px] text-zinc-500">How often to capture screen (OCR)</p>
+                </div>
+              </div>
+              
+              <div className="space-y-3 relative">
+                <div className="flex items-center gap-4">
+                  <input
+                    type="range"
+                    min="500"
+                    max="5000"
+                    step="500"
+                    value={captureInterval}
+                    onChange={(e) => setCaptureInterval(parseInt(e.target.value))}
+                    className="flex-1 h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                  />
+                  <span className="text-lg font-mono text-white w-20 text-right">
+                    {captureInterval < 1000 ? `${captureInterval}ms` : `${captureInterval/1000}s`}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-[11px] text-zinc-500">
+                  <span>Faster (more captures)</span>
+                  <span>Slower (less CPU)</span>
+                </div>
+                <button
+                  onClick={handleSaveCaptureInterval}
+                  className="w-full px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-[12px] font-medium text-white transition-colors"
+                >
+                  Save Interval
+                </button>
               </div>
             </div>
           </section>
