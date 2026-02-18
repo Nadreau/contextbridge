@@ -176,8 +176,8 @@ export default function Dashboard() {
         disabled={toggling}
         className={`w-full flex items-center justify-between p-6 rounded-2xl transition-all duration-300 mb-6 disabled:opacity-70 relative overflow-hidden ${
           isActive
-            ? 'bg-emerald-500/10 border-2 border-emerald-500/50'
-            : 'bg-zinc-900 border-2 border-zinc-800 hover:border-zinc-700'
+            ? 'bg-emerald-500/10 border-2 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.15)]'
+            : 'bg-zinc-900 border-2 border-zinc-800 hover:border-zinc-700 hover:shadow-lg'
         }`}
       >
         {/* Capture pulse animation */}
