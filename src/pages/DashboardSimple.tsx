@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { Power, Brain, Zap, Clock, Eye, FileText, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useCaptureContext, type ActivityEvent } from '../lib/captureContext';
-import { getMemoryStats, getAllMemories, checkCapturePermission, rapidCaptureWithOcr, type MemoryStats, type Memory } from '../lib/api';
+import { getMemoryStats, getAllMemories, checkCapturePermission, checkTesseractInstalled, rapidCaptureWithOcr, type MemoryStats, type Memory } from '../lib/api';
 
 // Calculate top apps from recent memories
 function getTopApps(memories: Memory[]): { app: string; count: number }[] {
@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState<MemoryStats | null>(null);
   const [lastCapture, setLastCapture] = useState<Memory | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [hasTesseract, setHasTesseract] = useState<boolean | null>(null);
   const [showSaveToast, setShowSaveToast] = useState(false);
   const [testingCapture, setTestingCapture] = useState(false);
   const [testResult, setTestResult] = useState<string | null>(null);
@@ -31,9 +32,10 @@ export default function Dashboard() {
   const [sessionStart] = useState(() => Date.now());
   const captureInterval = parseInt(localStorage.getItem('capture_interval') || '1000');
 
-  // Check permission on mount
+  // Check permission and tesseract on mount
   useEffect(() => {
     checkCapturePermission().then(setHasPermission).catch(() => setHasPermission(false));
+    checkTesseractInstalled().then(setHasTesseract).catch(() => setHasTesseract(false));
   }, []);
 
   // Keyboard shortcut: Cmd+Shift+C to toggle capture
@@ -122,6 +124,19 @@ export default function Dashboard() {
             <p className="text-sm font-medium text-amber-400">Screen Recording Permission Required</p>
             <p className="text-xs text-zinc-400 mt-1">
               Go to System Settings → Privacy & Security → Screen Recording → Enable for ContextBridge
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Tesseract Warning */}
+      {hasTesseract === false && (
+        <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 mb-4 flex items-start gap-3">
+          <AlertTriangle size={20} className="text-rose-400 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-medium text-rose-400">Tesseract OCR Not Installed</p>
+            <p className="text-xs text-zinc-400 mt-1">
+              Run: <code className="bg-zinc-800 px-1 rounded">brew install tesseract</code>
             </p>
           </div>
         </div>

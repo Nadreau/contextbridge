@@ -983,6 +983,12 @@ fn check_capture_permission() -> bool {
     capture::check_screen_permission()
 }
 
+/// Check if tesseract OCR is installed
+#[tauri::command]
+fn check_tesseract_installed() -> bool {
+    capture::check_tesseract_installed()
+}
+
 #[tauri::command]
 fn start_capture(capture_state: State<CaptureState>) -> CaptureStatus {
     *capture_state.is_active.lock().unwrap() = true;
@@ -1244,6 +1250,7 @@ pub fn run() {
             smart_capture,
             rapid_capture_with_ocr,
             check_capture_permission,
+            check_tesseract_installed,
             start_capture,
             stop_capture,
             get_capture_status,

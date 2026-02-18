@@ -28,6 +28,15 @@ pub fn check_screen_permission() -> bool {
     }
 }
 
+/// Check if tesseract is installed
+pub fn check_tesseract_installed() -> bool {
+    Command::new("tesseract")
+        .arg("--version")
+        .output()
+        .map(|o| o.status.success())
+        .unwrap_or(false)
+}
+
 /// Take a screenshot and return the path
 pub fn take_screenshot() -> Result<PathBuf, String> {
     let timestamp = Local::now().format("%Y%m%d_%H%M%S_%3f").to_string();

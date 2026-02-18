@@ -151,6 +151,11 @@ export async function checkCapturePermission(): Promise<boolean> {
   return invoke<boolean>('check_capture_permission');
 }
 
+/** Check if tesseract OCR is installed */
+export async function checkTesseractInstalled(): Promise<boolean> {
+  return invoke<boolean>('check_tesseract_installed');
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // Screen Recording API
 // ═══════════════════════════════════════════════════════════════════════════════
