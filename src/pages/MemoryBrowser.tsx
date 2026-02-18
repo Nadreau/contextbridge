@@ -299,7 +299,9 @@ export default function MemoryBrowser() {
               <div className="mt-4 grid grid-cols-2 gap-4">
                 <div className="bg-zinc-900/50 rounded-lg p-3">
                   <p className="text-xs text-zinc-500 mb-1">Source</p>
-                  <p className="text-sm text-zinc-300">{selected.source}</p>
+                  <p className={`text-sm ${selected.source === 'ocr-capture' ? 'text-emerald-400' : 'text-zinc-300'}`}>
+                    {selected.source === 'ocr-capture' ? '✓ OCR Capture' : selected.source}
+                  </p>
                 </div>
                 <div className="bg-zinc-900/50 rounded-lg p-3">
                   <p className="text-xs text-zinc-500 mb-1">App</p>
