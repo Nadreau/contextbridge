@@ -2,7 +2,7 @@
  * Memory Browser — View and search all captured memories
  */
 import { useState, useEffect, useCallback } from 'react';
-import { Search, Clock, Monitor, X, ChevronRight, Trash2, Eye } from 'lucide-react';
+import { Search, Clock, Monitor, X, ChevronRight, Trash2, Eye, Download } from 'lucide-react';
 import { 
   getAllMemories, 
   searchMemories, 
@@ -60,6 +60,21 @@ export default function MemoryBrowser() {
     } catch (err) {
       console.error('Delete failed:', err);
     }
+  };
+
+  const handleExportMarkdown = () => {
+    const markdown = memories.map(m => {
+      const date = new Date(m.timestamp).toLocaleString();
+      return `## ${date} - ${m.source_app || 'Unknown'}\n\n\`\`\`\n${m.content}\n\`\`\`\n\nTags: ${m.tags.join(', ') || 'none'}\n\n---\n`;
+    }).join('\n');
+    
+    const blob = new Blob([markdown], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `contextbridge-export-${new Date().toISOString().split('T')[0]}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const formatTime = (ts: string) => {
@@ -167,8 +182,17 @@ export default function MemoryBrowser() {
           )}
         </div>
         
-        <div className="p-3 border-t border-zinc-800 text-center">
+        <div className="p-3 border-t border-zinc-800 flex items-center justify-between">
           <span className="text-xs text-zinc-600">{memories.length} memories</span>
+          {memories.length > 0 && (
+            <button
+              onClick={handleExportMarkdown}
+              className="flex items-center gap-1 text-xs text-violet-400 hover:text-violet-300"
+            >
+              <Download size={12} />
+              Export
+            </button>
+          )}
         </div>
       </div>
 
