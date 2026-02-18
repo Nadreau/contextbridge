@@ -360,7 +360,7 @@ function ActivityItem({ event }: { event: ActivityEvent }) {
   };
 
   return (
-    <div className={`flex items-start gap-3 p-3 rounded-lg border transition-colors ${
+    <div className={`flex items-start gap-3 p-3 rounded-lg border transition-all animate-fade-in-up ${
       event.saved 
         ? 'bg-emerald-500/5 border-emerald-500/20 hover:bg-emerald-500/10' 
         : 'bg-zinc-900/50 border-zinc-800/50 hover:bg-zinc-900'
