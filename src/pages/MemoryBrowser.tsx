@@ -285,8 +285,12 @@ export default function MemoryBrowser() {
               )}
 
               {/* Full content */}
-              <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
-                <pre className="text-sm text-zinc-300 whitespace-pre-wrap font-mono leading-relaxed">
+              <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
+                <div className="px-4 py-2 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/50">
+                  <span className="text-xs text-zinc-500">OCR Content</span>
+                  <span className="text-xs text-zinc-600">{selected.content.split('\n').length} lines</span>
+                </div>
+                <pre className="text-sm text-zinc-300 whitespace-pre-wrap font-mono leading-relaxed p-4">
                   {selected.content}
                 </pre>
               </div>
