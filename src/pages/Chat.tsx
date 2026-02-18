@@ -29,14 +29,16 @@ async function queryGemini(prompt: string, context: string): Promise<string> {
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: `You are a helpful assistant with access to the user's screen activity memory. 
-              
-Here is the relevant context from their recent activity:
+              text: `You are a helpful AI assistant that helps users understand their computer activity. You have access to OCR captures from their screen - text that was visible on their screen at different times.
+
+Here is the captured screen text from their recent activity:
 ---
 ${context}
 ---
 
-Based on this context, answer the user's question naturally and helpfully. If the context doesn't contain relevant information, say so.
+Based on this captured text, answer the user's question. Be specific and reference actual content you can see in the captures. If you see app names, window titles, or specific text, mention them.
+
+If the context doesn't contain relevant information for the question, say so honestly and suggest what kind of activity might help find the answer.
 
 User's question: ${prompt}`
             }]
@@ -66,7 +68,15 @@ export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [contextCount, setContextCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Check context availability
+  useEffect(() => {
+    searchMemories('', 100).then(memories => {
+      setContextCount(memories.length);
+    }).catch(console.error);
+  }, []);
   
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -145,22 +155,28 @@ export default function Chat() {
             <div className="w-16 h-16 rounded-2xl bg-violet-500/10 flex items-center justify-center mb-4">
               <Bot size={32} className="text-violet-400" />
             </div>
-            <h2 className="text-lg font-medium text-zinc-300 mb-2">Start a conversation</h2>
-            <p className="text-sm text-zinc-500 max-w-md">
+            <h2 className="text-lg font-medium text-zinc-300 mb-2">Ask Your Memory</h2>
+            <p className="text-sm text-zinc-500 max-w-md mb-2">
               Ask questions about your day, what you were working on, or anything from your captured context.
             </p>
-            <div className="mt-6 space-y-2">
+            <p className="text-xs text-violet-400 mb-6">
+              {contextCount > 0 
+                ? `✓ ${contextCount} memories available for context`
+                : '○ No memories yet - turn on capture first'}
+            </p>
+            <div className="space-y-2 w-full max-w-sm">
               {[
                 "What was I working on this morning?",
-                "Summarize my browser activity today",
-                "What files did I edit recently?",
+                "Summarize my recent activity",
+                "What apps have I been using?",
+                "What websites did I visit?",
               ].map((suggestion, i) => (
                 <button
                   key={i}
                   onClick={() => setInput(suggestion)}
-                  className="block w-full px-4 py-2 rounded-lg bg-zinc-800/50 text-sm text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300 transition-colors"
+                  className="block w-full px-4 py-2 rounded-lg bg-zinc-800/50 text-sm text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300 transition-colors text-left"
                 >
-                  {suggestion}
+                  → {suggestion}
                 </button>
               ))}
             </div>
