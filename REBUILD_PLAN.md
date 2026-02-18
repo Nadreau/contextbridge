@@ -195,12 +195,41 @@ System:
    - Search, filter by type (OCR/manual)
    - Full detail view with OCR text
 
-**To Test:**
-1. Run `npm run tauri dev`
-2. Click the big toggle to start capturing
-3. Switch between apps, browse web, etc.
-4. Check Memory Browser to see captured OCR text
-5. Try Chat to ask questions about your context
+**To Test (When You Wake Up):**
+
+1. **Grant Permission First:**
+   - System Settings → Privacy & Security → Screen Recording
+   - Enable for ContextBridge (or Terminal if testing via npm run tauri dev)
+
+2. **Run the app:**
+   ```bash
+   cd /Users/nikonadreau/Desktop/contextbridge-app
+   npm run tauri dev
+   ```
+
+3. **Check Permission Warning:**
+   - If you see amber warning banner, fix permissions first
+
+4. **Test Capture:**
+   - Click the big toggle to start capturing
+   - Switch between apps (Chrome, VS Code, Terminal, etc.)
+   - Watch the "Live Activity" feed fill up
+   - Check the "Last Capture" preview - should show OCR text!
+
+5. **Test Chat:**
+   - Go to Settings → Add Gemini API key (free: aistudio.google.com/app/apikey)
+   - Go to Chat page
+   - Ask: "What was I just doing?" or "What apps did I use?"
+
+6. **Test Memory Browser:**
+   - Go to Memory page
+   - Search for specific text you saw on screen
+   - Filter by "Screen Captures" to see OCR results
+
+7. **Check Logs:**
+   - In terminal running the app, look for:
+     `[ContextBridge] Capture: screenshot=XXms, ocr=XXms, app=Chrome, chars=1234`
+   - This shows OCR is working
 
 **What's Working:**
 - ✅ Configurable capture interval (500ms - 5s, default 1s)
@@ -211,11 +240,14 @@ System:
 - ✅ Full OCR text storage
 - ✅ Settings page with Gemini key + capture interval
 
-### Latest Changes (00:49)
+### Latest Changes (00:51)
 - Added capture interval slider in Settings (500ms - 5s)
 - Added "Last Capture" preview on Dashboard
 - Improved Chat page with context count and better prompts
 - Added Gemini Vision helper (for future AI image understanding)
+- Added screen recording permission check with warning banner
+- Added capture timing logs for debugging
+- Full testing guide above
 
 **Still TODO:**
 - [ ] Auto-start capture option
