@@ -203,12 +203,19 @@ System:
 5. Try Chat to ask questions about your context
 
 **What's Working:**
-- ✅ 1-second capture interval
+- ✅ Configurable capture interval (500ms - 5s, default 1s)
 - ✅ Tesseract OCR (brew installed)
-- ✅ Clean Dashboard UI
+- ✅ Clean Dashboard UI with last capture preview
 - ✅ Memory Browser with search/filter
-- ✅ Gemini Chat integration
+- ✅ Gemini Chat integration with context count
 - ✅ Full OCR text storage
+- ✅ Settings page with Gemini key + capture interval
+
+### Latest Changes (00:49)
+- Added capture interval slider in Settings (500ms - 5s)
+- Added "Last Capture" preview on Dashboard
+- Improved Chat page with context count and better prompts
+- Added Gemini Vision helper (for future AI image understanding)
 
 **Still TODO:**
 - [ ] Auto-start capture option

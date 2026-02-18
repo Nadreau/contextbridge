@@ -822,9 +822,11 @@ fn rapid_capture_with_ocr(
     capture_state: State<CaptureState>,
 ) -> CaptureResult {
     // Take screenshot
+    let start = std::time::Instant::now();
     let screenshot_path = match capture::take_screenshot() {
         Ok(path) => path,
         Err(e) => {
+            eprintln!("[ContextBridge] Screenshot failed: {}", e);
             return CaptureResult {
                 success: false,
                 changed: false,
@@ -834,12 +836,23 @@ fn rapid_capture_with_ocr(
             };
         }
     };
+    let screenshot_time = start.elapsed();
     
     // Get active window info
     let (app_name, window_title) = capture::get_active_window();
     
     // Run OCR on the screenshot using tesseract (fast and reliable)
+    let ocr_start = std::time::Instant::now();
     let ocr_text = capture::ocr_tesseract(&screenshot_path).unwrap_or_default();
+    let ocr_time = ocr_start.elapsed();
+    
+    // Log timing for debugging
+    if !ocr_text.is_empty() {
+        println!(
+            "[ContextBridge] Capture: screenshot={:?}, ocr={:?}, app={}, chars={}",
+            screenshot_time, ocr_time, app_name, ocr_text.len()
+        );
+    }
     
     // Clean up screenshot
     let _ = std::fs::remove_file(&screenshot_path);
