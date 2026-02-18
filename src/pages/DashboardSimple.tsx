@@ -28,6 +28,7 @@ export default function Dashboard() {
   const [testingCapture, setTestingCapture] = useState(false);
   const [testResult, setTestResult] = useState<string | null>(null);
   const [topApps, setTopApps] = useState<{ app: string; count: number }[]>([]);
+  const [sessionStart] = useState(() => Date.now());
 
   // Check permission on mount
   useEffect(() => {
@@ -210,6 +211,11 @@ export default function Dashboard() {
             <span className="text-xs uppercase">This Session</span>
           </div>
           <p className="text-3xl font-bold text-violet-400">{captureCount}</p>
+          {isActive && captureCount > 0 && (
+            <p className="text-xs text-zinc-500 mt-1">
+              ~{Math.round(captureCount / Math.max(1, (Date.now() - sessionStart) / 60000))}/min
+            </p>
+          )}
         </div>
       </div>
 
