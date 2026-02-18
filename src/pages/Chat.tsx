@@ -192,7 +192,8 @@ export default function Chat() {
                 <button
                   key={i}
                   onClick={() => setInput(suggestion)}
-                  className="block w-full px-4 py-2 rounded-lg bg-zinc-800/50 text-sm text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300 transition-colors text-left"
+                  className="block w-full px-4 py-2 rounded-lg bg-zinc-800/50 text-sm text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300 hover:translate-x-1 transition-all text-left"
+                  style={{ animationDelay: `${i * 0.1}s` }}
                 >
                   → {suggestion}
                 </button>
