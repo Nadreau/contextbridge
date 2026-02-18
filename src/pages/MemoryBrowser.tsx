@@ -159,8 +159,14 @@ export default function MemoryBrowser() {
               <div className="w-6 h-6 border-2 border-violet-400/30 border-t-violet-400 rounded-full animate-spin" />
             </div>
           ) : memories.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-32 text-zinc-500">
-              <p>No memories found</p>
+            <div className="flex flex-col items-center justify-center h-32 text-center px-4">
+              <Eye size={24} className="text-zinc-700 mb-2" />
+              <p className="text-sm text-zinc-500">
+                {search ? 'No memories match your search' : 'No memories yet'}
+              </p>
+              <p className="text-xs text-zinc-600 mt-1">
+                {search ? 'Try different keywords' : 'Start capturing to build your memory'}
+              </p>
             </div>
           ) : (
             <div className="divide-y divide-zinc-800/50">
