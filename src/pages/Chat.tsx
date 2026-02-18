@@ -2,7 +2,7 @@
  * Chat Page — Talk to your memory with Gemini
  */
 import { useState, useRef, useEffect } from 'react';
-import { Send, Sparkles, Bot, User, Loader2 } from 'lucide-react';
+import { Send, Sparkles, Bot, User, Loader2, Trash2 } from 'lucide-react';
 import { searchMemories, type Memory } from '../lib/api';
 
 interface Message {
@@ -137,14 +137,25 @@ export default function Chat() {
     <div className="h-full flex flex-col bg-[#09090b]">
       {/* Header */}
       <div className="px-6 py-4 border-b border-white/[0.04]">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 flex items-center justify-center">
-            <Sparkles size={20} className="text-violet-400" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/10 flex items-center justify-center">
+              <Sparkles size={20} className="text-violet-400" />
+            </div>
+            <div>
+              <h1 className="text-lg font-semibold text-white">Ask Your Memory</h1>
+              <p className="text-xs text-zinc-500">Powered by Gemini · {contextCount} memories</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-lg font-semibold text-white">Ask Your Memory</h1>
-            <p className="text-xs text-zinc-500">Powered by Gemini</p>
-          </div>
+          {messages.length > 0 && (
+            <button
+              onClick={() => setMessages([])}
+              className="p-2 rounded-lg text-zinc-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+              title="Clear chat"
+            >
+              <Trash2 size={18} />
+            </button>
+          )}
         </div>
       </div>
       
